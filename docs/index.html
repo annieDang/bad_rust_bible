@@ -1,10 +1,360 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Annie Dang</title>
-  </head>
-  <body>
-    <h1>Hello world</h1>
-    <p>This is my GitHub Page.</p>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Bad Rust Bible</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --accent: #f97316;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --border: #334155;
+            --purple: #a78bfa;
+            --blue: #60a5fa;
+            --yellow: #fbbf24;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px 80px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container { max-width: 760px; width: 100%; }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+            padding-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .book-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        h1 span { color: var(--accent); }
+
+        .tagline {
+            font-style: italic;
+            color: var(--text-dim);
+            font-size: 1rem;
+            margin-bottom: 24px;
+        }
+
+        .epigraph {
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 16px 20px;
+            font-style: italic;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ── Books ── */
+        .book {
+            margin-bottom: 40px;
+        }
+
+        .book-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .book-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .book-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            font-style: italic;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* ── Chapter list ── */
+        .chapters {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chapter {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: border-color 0.15s, background 0.15s;
+        }
+
+        .chapter.available {
+            border-color: var(--border);
+            background: var(--card-bg);
+        }
+
+        .chapter.available:hover {
+            border-color: var(--accent);
+            background: #1e293b;
+        }
+
+        .chapter.available a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .chapter.available:hover a {
+            color: var(--accent);
+        }
+
+        .chapter.soon {
+            border-color: transparent;
+            background: transparent;
+            opacity: 0.45;
+            cursor: default;
+        }
+
+        .chapter.soon .chapter-name {
+            color: var(--text-dim);
+            flex: 1;
+        }
+
+        .chapter-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            min-width: 20px;
+        }
+
+        .chapter-arrow {
+            color: var(--accent);
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+
+        .chapter.available:hover .chapter-arrow {
+            opacity: 1;
+        }
+
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-new {
+            background: #1c3a1c;
+            color: var(--success);
+            border: 1px solid #2a5a2a;
+        }
+
+        .badge-wip {
+            background: #2a1e0a;
+            color: var(--yellow);
+            border: 1px solid #4a3510;
+        }
+
+        .badge-soon {
+            background: #1e293b;
+            color: var(--text-dim);
+            border: 1px solid var(--border);
+        }
+
+        /* ── Footer ── */
+        footer {
+            margin-top: 56px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <header>
+        <div class="book-eyebrow">A Field Guide to Catastrophic Rust</div>
+        <h1>The <span>Bad</span> Rust Bible</h1>
+        <p class="tagline">A Guide to Writing Terrible Rust Code (So You Never Do)</p>
+        <div class="epigraph">
+            "In the beginning was the Borrow Checker, and the Borrow Checker was with Rust,
+            and the Borrow Checker was Rust. And the programmer looked upon it and said:
+            'this is annoying, I'll just clone everything.' And there was darkness."
+        </div>
+    </header>
+
+    <!-- ── Book I ── -->
+    <div class="book">
+        <div class="book-header">
+            <span class="book-number">Book I</span>
+            <span class="book-title">The Gospel of Ownership</span>
+            <span class="book-subtitle">aka stop fighting the borrow checker</span>
+        </div>
+        <ul class="chapters">
+            <li class="chapter available">
+                <span class="chapter-num">I</span>
+                <a href="ownership/Temptation_of_cloning.html">Clone Thy Neighbour</a>
+                <span class="badge badge-new">NEW</span>
+                <span class="chapter-arrow">→</span>
+            </li>
+            <li class="chapter soon">
+                <span class="chapter-num">II</span>
+                <span class="chapter-name">Unwrap All Things</span>
+                <span class="badge badge-soon">SOON</span>
+            </li>
+            <li class="chapter soon">
+                <span class="chapter-num">III</span>
+                <span class="chapter-name">RefCell Everywhere</span>
+                <span class="badge badge-soon">SOON</span>
+            </li>
+            <li class="chapter soon">
+                <span class="chapter-num">IV</span>
+                <span class="chapter-name">Arc&lt;Mutex&lt;…&gt;&gt; as a Lifestyle</span>
+                <span class="badge badge-soon">SOON</span>
+            </li>
+            <li class="chapter soon">
+                <span class="chapter-num">V</span>
+                <span class="chapter-name">Lifetimes by Panic, Not Design</span>
+                <span class="badge badge-soon">SOON</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ── Book II ── -->
+    <div class="book">
+        <div class="book-header">
+            <span class="book-number">Book II</span>
+            <span class="book-title">Error Handling: Lamentations of anyhow</span>
+        </div>
+        <ul class="chapters">
+            <li class="chapter soon"><span class="chapter-num">I</span><span class="chapter-name">unwrap() in Production</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">II</span><span class="chapter-name">Lossy Errors (map_err(|_| "nope"))</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">III</span><span class="chapter-name">Stringly-Typed Errors</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">IV</span><span class="chapter-name">Ignoring Context</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">V</span><span class="chapter-name">Panic as Control Flow</span><span class="badge badge-soon">SOON</span></li>
+        </ul>
+    </div>
+
+    <!-- ── Book III ── -->
+    <div class="book">
+        <div class="book-header">
+            <span class="book-number">Book III</span>
+            <span class="book-title">API Design: Corinthians to Crate Authors</span>
+        </div>
+        <ul class="chapters">
+            <li class="chapter soon"><span class="chapter-num">I</span><span class="chapter-name">Expose Struct Fields Publicly</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">II</span><span class="chapter-name">Return bool Instead of a Meaningful Type</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">III</span><span class="chapter-name">Accept String When &amp;str Would Do</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">IV</span><span class="chapter-name">Return Option When You Mean Result</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">V</span><span class="chapter-name">Inconsistent Naming and Units</span><span class="badge badge-soon">SOON</span></li>
+        </ul>
+    </div>
+
+    <!-- ── Book IV ── -->
+    <div class="book">
+        <div class="book-header">
+            <span class="book-number">Book IV</span>
+            <span class="book-title">Performance: Ecclesiastes of Premature Optimisation</span>
+        </div>
+        <ul class="chapters">
+            <li class="chapter soon"><span class="chapter-num">I</span><span class="chapter-name">Allocate in a Hot Loop</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">II</span><span class="chapter-name">Collect Everything Into a Vec</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">III</span><span class="chapter-name">to_string() Everywhere</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">IV</span><span class="chapter-name">Clone Big Things for Convenience</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">V</span><span class="chapter-name">Micro-optimise While Ignoring Algorithmic Wins</span><span class="badge badge-soon">SOON</span></li>
+        </ul>
+    </div>
+
+    <!-- ── Book V ── -->
+    <div class="book">
+        <div class="book-header">
+            <span class="book-number">Book V</span>
+            <span class="book-title">Testing &amp; Maintenance: Revelations of Flakiness</span>
+        </div>
+        <ul class="chapters">
+            <li class="chapter soon"><span class="chapter-num">I</span><span class="chapter-name">No Tests, Only Vibes</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">II</span><span class="chapter-name">Integration Tests for Everything</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">III</span><span class="chapter-name">Brittle Snapshot Tests</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">IV</span><span class="chapter-name">Tests That Depend on Wall-Clock Time</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">V</span><span class="chapter-name">Ignoring cargo clippy</span><span class="badge badge-soon">SOON</span></li>
+        </ul>
+    </div>
+
+    <!-- ── Book VI ── -->
+    <div class="book">
+        <div class="book-header">
+            <span class="book-number">Book VI</span>
+            <span class="book-title">Concurrency: The Book of Deadlocks</span>
+        </div>
+        <ul class="chapters">
+            <li class="chapter soon"><span class="chapter-num">I</span><span class="chapter-name">Lock Ordering? Never Heard of Her</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">II</span><span class="chapter-name">Hold Locks Across .await</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">III</span><span class="chapter-name">Spawn Storms</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">IV</span><span class="chapter-name">Shared Mutable State for "Simplicity"</span><span class="badge badge-soon">SOON</span></li>
+            <li class="chapter soon"><span class="chapter-num">V</span><span class="chapter-name">Non-deterministic Behaviour Disguised as "async"</span><span class="badge badge-soon">SOON</span></li>
+        </ul>
+    </div>
+
+    <footer>The Bad Rust Bible — work in progress</footer>
+
+</div>
+</body>
 </html>
