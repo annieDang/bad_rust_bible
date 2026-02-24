@@ -9,6 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../site.css">
     <style>
         :root {
             --bg-color: #0f172a;
@@ -195,14 +196,21 @@
 <body>
 
 <div class="container">
+    <div id="site-nav"></div>
+
     <header>
         <h1>Commandment I: Clone Thy Neighbour</h1>
         <p class="subtitle">Insights into Rust Ownership and the "Dark Art" of .clone()</p>
+        <blockquote style="margin: 20px auto; max-width: 620px; font-style: italic; color: var(--text-dim); border-left: 4px solid var(--accent); padding: 12px 18px; background: var(--card-bg); border-radius: 0 8px 8px 0; font-size: 0.9rem; text-align: left;">
+            "In the beginning was the Borrow Checker, and the Borrow Checker was with Rust,
+            and the Borrow Checker was Rust. And the programmer looked upon it and said:
+            'this is annoying, I'll just clone everything.' And there was darkness."
+        </blockquote>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="openTab(event, 'the-sin')">The Sin</button>
-        <button class="tab-btn" onclick="openTab(event, 'the-laws')">The Laws (Ch. 4)</button>
+        <button class="tab-btn active" onclick="openTab(event, 'the-laws')">The Laws (Ch. 4)</button>
+        <button class="tab-btn" onclick="openTab(event, 'the-sin')">The Sin</button>
         <button class="tab-btn" onclick="openTab(event, 'righteous')">The Righteous Way</button>
         <button class="tab-btn" onclick="openTab(event, 'smell-test')">Smell Test</button>
         <button class="tab-btn" onclick="openTab(event, 'when-to-clone')">When it's Fine</button>
@@ -564,6 +572,8 @@ let thread_clone = Arc::clone(&shared_config); // Cheap pointer increment</code>
             </div>
         </div>
     </div>
+
+    <div id="site-footer"></div>
 </div>
 
 <script>
@@ -590,5 +600,16 @@ let thread_clone = Arc::clone(&shared_config); // Cheap pointer increment</code>
 
     hljs.highlightAll();
 </script>
+
+<script>
+window.SITE_CONFIG = {
+    root: '../',
+    breadcrumbs: [
+        { label: 'Book I — The Gospel of Ownership', href: '../index.html' },
+        { label: 'Clone Thy Neighbour' }
+    ]
+};
+</script>
+<script src="../site.js"></script>
 </body>
 </html>
